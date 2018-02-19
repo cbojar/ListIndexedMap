@@ -1,0 +1,9 @@
+# Output files and folders
+*.class
+target/
+bin/
+
+# Eclipse files
+.settings/
+.classpath
+.project
