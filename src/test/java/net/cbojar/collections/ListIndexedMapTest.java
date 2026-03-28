@@ -110,6 +110,7 @@ public class ListIndexedMapTest {
 	}
 
 	@Test(expected=ClassCastException.class)
+	@SuppressWarnings("unlikely-arg-type")
 	public void shouldNotAcceptANonIntegerKeyToCheckForContainment() {
 		final ListIndexedMap<String> listIndexedMap = ListIndexedMap.of(listOf("a", "b"));
 
@@ -159,6 +160,7 @@ public class ListIndexedMapTest {
 	}
 
 	@Test(expected=ClassCastException.class)
+	@SuppressWarnings("unlikely-arg-type")
 	public void shouldNotAcceptANonIntegerKeyToGetAValue() {
 		final ListIndexedMap<String> listIndexedMap = ListIndexedMap.of(listOf("a", "b"));
 
