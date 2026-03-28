@@ -2,8 +2,11 @@ package net.cbojar.collections;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.Test;
+
+import org.hamcrest.Matcher;
 
 import java.util.*;
 
@@ -25,7 +28,7 @@ public class ListIndexedMapTest {
 		final List<String> list = listOf("a", "b");
 		final ListIndexedMap<String> listIndexedMap = ListIndexedMap.of(list);
 
-		assertThat(listIndexedMap.size(), is(list.size()));
+		assertThatInt(listIndexedMap.size(), isInt(list.size()));
 	}
 
 	@Test
@@ -46,11 +49,11 @@ public class ListIndexedMapTest {
 	public void shouldClearAllValues() {
 		final ListIndexedMap<String> listIndexedMap = ListIndexedMap.of(listOf("a", "b"));
 
-		assertThat(listIndexedMap.size(), is(2));
+		assertThatInt(listIndexedMap.size(), isInt(2));
 
 		listIndexedMap.clear();
 
-		assertThat(listIndexedMap.size(), is(0));
+		assertThatInt(listIndexedMap.size(), isInt(0));
 	}
 
 	@Test
@@ -179,7 +182,7 @@ public class ListIndexedMapTest {
 	public void shouldReturnTheSetOfKeys() {
 		final ListIndexedMap<String> listIndexedMap = ListIndexedMap.of(listOf("a", "b"));
 
-		final Set<Integer> expected = new HashSet<>(listOf(0, 1));
+		final Set<Integer> expected = new HashSet<>(listOf(Integer.valueOf(0), Integer.valueOf(1)));
 		assertThat(listIndexedMap.keySet(), is(expected));
 	}
 
@@ -187,7 +190,7 @@ public class ListIndexedMapTest {
 	public void shouldIterateOverTheSetOfKeys() {
 		final ListIndexedMap<String> listIndexedMap = ListIndexedMap.of(listOf("a", "b"));
 
-		assertThat(listIndexedMap.keySet(), hasItems(0, 1));
+		assertThat(listIndexedMap.keySet(), hasItems(Integer.valueOf(0), Integer.valueOf(1)));
 	}
 
 	@Test
@@ -206,7 +209,7 @@ public class ListIndexedMapTest {
 
 		final String oldValue = listIndexedMap.put(Integer.valueOf(2), "c");
 
-		assertThat(listIndexedMap.size(), is(3));
+		assertThatInt(listIndexedMap.size(), isInt(3));
 		assertThat(listIndexedMap.get(2), is("c"));
 		assertThat(oldValue, is(nullValue()));
 	}
@@ -217,7 +220,7 @@ public class ListIndexedMapTest {
 
 		final String oldValue = listIndexedMap.put(Integer.valueOf(4), "c");
 
-		assertThat(listIndexedMap.size(), is(5));
+		assertThatInt(listIndexedMap.size(), isInt(5));
 		assertTrue(listIndexedMap.containsKey(3));
 		assertThat(listIndexedMap.get(3), is(nullValue()));
 		assertThat(listIndexedMap.get(4), is("c"));
@@ -236,13 +239,13 @@ public class ListIndexedMapTest {
 		final ListIndexedMap<String> listIndexedMap = ListIndexedMap.of(listOf("a", "b"));
 
 		final Map<Integer, String> otherMap = new HashMap<>();
-		otherMap.put(1, "c");
-		otherMap.put(2, "d");
-		otherMap.put(4, "e");
+		otherMap.put(Integer.valueOf(1), "c");
+		otherMap.put(Integer.valueOf(2), "d");
+		otherMap.put(Integer.valueOf(4), "e");
 
 		listIndexedMap.putAll(otherMap);
 
-		assertThat(listIndexedMap.size(), is(5));
+		assertThatInt(listIndexedMap.size(), isInt(5));
 		assertThat(listIndexedMap.get(0), is("a"));
 		assertThat(listIndexedMap.get(1), is("c"));
 		assertThat(listIndexedMap.get(2), is("d"));
@@ -255,7 +258,7 @@ public class ListIndexedMapTest {
 
 		final String oldValue = listIndexedMap.remove((Object)Integer.valueOf(0));
 
-		assertThat(listIndexedMap.size(), is(2));
+		assertThatInt(listIndexedMap.size(), isInt(2));
 		assertThat(listIndexedMap.get(0), is(nullValue()));
 		assertThat(listIndexedMap.get(1), is("b"));
 		assertThat(oldValue, is("a"));
@@ -267,7 +270,7 @@ public class ListIndexedMapTest {
 
 		final String oldValue = listIndexedMap.remove((Object)Integer.valueOf(3));
 
-		assertThat(listIndexedMap.size(), is(2));
+		assertThatInt(listIndexedMap.size(), isInt(2));
 		assertThat(listIndexedMap.get(0), is("a"));
 		assertThat(listIndexedMap.get(1), is("b"));
 		assertThat(oldValue, is(nullValue()));
@@ -276,5 +279,13 @@ public class ListIndexedMapTest {
 	@SafeVarargs
 	private static <T> List<T> listOf(final T... values) {
 		return new ArrayList<T>(Arrays.asList(values));
+	}
+
+	private static void assertThatInt(final int actual, final Matcher<Integer> expected) {
+		assertThat(Integer.valueOf(actual), expected);
+	}
+
+	private static Matcher<Integer> isInt(final int value) {
+		return is(Integer.valueOf(value));
 	}
 }
